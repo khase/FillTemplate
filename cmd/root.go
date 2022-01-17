@@ -9,8 +9,9 @@ import (
 )
 
 var (
-	templateFile string
-	outputFile   string
+	templateFile           string
+	outputFile             string
+	executeOnChangeCommand string
 
 	rootCmd = &cobra.Command{
 		Use:   "FillTemplate",
@@ -29,6 +30,7 @@ func Execute() error {
 func init() {
 	rootCmd.PersistentFlags().StringVarP(&templateFile, "template", "t", "", "Template file to fill")
 	rootCmd.PersistentFlags().StringVarP(&outputFile, "output", "o", "stdout", "file to save the result to")
+	rootCmd.PersistentFlags().StringVar(&executeOnChangeCommand, "exec", "", "command to execute when output file changed (requires output filename to be set)")
 
 	rootCmd.MarkFlagRequired("template")
 
