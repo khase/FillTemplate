@@ -4,13 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
-	"text/template"
 
+	"github.com/Masterminds/sprig"
 	"github.com/spf13/cobra"
 	"gopkg.in/yaml.v2"
 )
@@ -25,9 +26,19 @@ var (
 		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			templateString := getTemplate()
-			inputValues := getInput(args[0])
+			var inputValuesList []interface{}
+			for _, content := range args {
+				inputValuesList = append(inputValuesList, getInput(content))
+			}
 
-			tmpl, err := template.New("Template").Parse(templateString)
+			var input interface{}
+			if len(inputValuesList) == 1 {
+				input = inputValuesList[0]
+			} else {
+				input = inputValuesList
+			}
+
+			tmpl, err := template.New("Template").Funcs(sprig.FuncMap()).Parse(templateString)
 			if err != nil {
 				log.Fatal(err)
 				os.Exit(1)
@@ -35,7 +46,7 @@ var (
 
 			buf := new(bytes.Buffer)
 
-			err = tmpl.Execute(buf, inputValues)
+			err = tmpl.Execute(buf, input)
 			if err != nil {
 				log.Fatal(err)
 				os.Exit(1)
