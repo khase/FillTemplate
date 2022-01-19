@@ -2,14 +2,14 @@
 
 `FillTemplate` is a little go tool which allowes you to simply fill Templates with one or more json/yml files
 
-## Usage:
+# Usage:
   FillTemplate [global flags] fromfile [flags] [values file path] 
 
-### Flags:
+## Flags:
   -f, --format string   input file format (supports json or yaml) (default "yaml")
   -h, --help            help for fromfile
 
-### Global Flags:
+## Global Flags:
 | short command | long command | description |
 |---------------|--------------|-------------|
 |      | --exec string      | command to execute when output file changed (requires output filename to be set) |
